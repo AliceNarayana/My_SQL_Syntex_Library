@@ -1,0 +1,197 @@
+-- CODES TO MAKE RESEARCHS IN TABLES AND COLUMNS
+
+
+>>>Knowing your data<<<<
+
+>>> SYNTAX TO EXPLORE TABLES
+
+help table table_name
+
+
+SEL DISTINCT column_name-- the value suggested
+,CAST(column_timestamp AS DATE) as "Date"
+FROM  table_name
+WHERE CAST(column_timestamp AS DATE)>='2021/04/10'
+ORDER BY 1
+
+
+
+SEL DISTINCT column_name-- the value suggested
+FROM  table_name
+WHERE CAST(column_timestamp AS DATE) BETWEEN '2021/02/01' AND '2021/02/02'
+AND column_name_shape = 'circle'
+AND column_name_color = 'blue'
+AND column_name_market = 'US'
+ORDER BY 1
+
+
+SEL top 100
+c. client_id
+,c. first_name
+,c.last_name
+,c.email_address
+,case when c.client_type_code = 1 then 'premier'
+      when c.client_type_code = 2 then 'pessoal'
+Else 'unknown' end as client_type
+
+from mytable_alice_weekend c
+
+where c.client_type_code = 1 and c.client_geo = 'BR' and c.is_closed_y_n = 'N'
+
+
+
+>>> SYNTAX TO CREATE TABLES 
+
+CREATE TABLE test_alice_review.table1 AS (
+
+Select 
+tn1.forest_KEY
+,tn1.animal_IDENTIFIER
+,tn1.PRIORITY
+,tn1.REASON
+,tn2.animal_SCORE
+,tn2.geograph
+,tn2.REGION
+,tn2.shape_key
+,tn2.animal_id
+,tn2.run_realtime_id
+,tn2.birth_date
+
+
+FROM  table_name_1 tn1
+LEFT JOIN table_name_2 tn2 ON tn1.forest_key = tn2.shape_key 
+    
+where CAST (tn2.birth_date AS DATE) BETWEEN '2021/01/01' AND '2021/01/02'
+
+) WITH DATA UNIQUE PRIMARY INDEX (animal_id), INDEX (run_realtime_id);
+
+
+
+>>> SYMTAX TO SIMPLE JOINING TABLES
+
+SEL 
+-- Alert info
+,alert1.PRIORITY
+,alert1.REASON
+,alert1.SCORE
+,alert1.REGION
+,alert1.FLAGS
+,alert1.ACCOUNT_NUMBER
+,alert1.CATEGORY
+,alert1.CREATION_TIMESTAMP
+,alert1.color_id
+,alert1.realtime_transaction_id
+,alert1.cre_ts
+,alert1.animal_number
+
+-- Transaction Info
+,trans2.account_number
+,trans2.cre_ts
+,trans2.id
+,trans2.FLAG
+,trans2.check_definition_name
+,trans2.same_region
+,trans2.score
+
+FROM mytable_one_alice.alert1 alert1
+JOIN mytable_one_alice.trans2 trans2 ON alert1.animal_number = trans2.account_number
+
+
+
+>>> SYNTAX HOW TO JOIN TABLES
+
+from data_is_cool.havefun_transactions rt
+JOIN data_is_cool.havefun_rule_alert ra ON ra.transaction_id = rt.id --both columns must contain the same data
+JOIN data_is_cool.color lor ON lor.color_key = ra.color_id --both columns must contain the same data
+
+
+
+
+>>> SYNTAX TO WORKING WITH VARIABLE DATES, SOME DIFFERENT SYNTEX
+
+--using the sintax CAST
+select
+CAST(creation_timestamp AS DATE) as "Date"
+
+where
+CAST(creation_timestamp AS DATE) BETWEEN '2020-01-01' AND DATE --up the current date
+
+-- useing the sintax to_date
+where to_date(columnname_date_value,'mm/dd/yyyy') >= to_date('01/01/2020','mm/dd/yyyy')
+
+
+
+>>> SYNTAX TO COUNT DISTINCT 
+
+SELECT 
+distinct count(*) as "Alert_color",
+date_value_time as "Date"
+from mytable_test.faketable
+where to_date(columnname_date_value,'mm/dd/yyyy') >= to_date('01/01/2020','mm/dd/yyyy')
+group by "Date"
+order by "Date"
+
+
+
+>>> SYNTAX TO COUNT SPECIFIC COLUMN
+
+SELECT  
+count(COLUMN_NAME) as "color",
+date_value_time as "Date"
+from mytable_test.faketable
+where COLUMN_NAME = 'yellow'
+and to_date(date_value_time,'mm/dd/yyyy') >= to_date('01/01/2020','mm/dd/yyyy')
+group by "Date"
+order by "Date"
+
+
+>>> SYNTAX CREATING CASES
+
+SELECT
+
+wek.day_of_the_week AS Name_days
+,wek.client_number AS client_identifier
+
+,CASE
+    WHEN wek.workflow_name = 'Front_office' THEN 'Front'
+    WHEN wek.workflow_name = 'back_office' THEN 'Back'
+    ELSE wek.workflow_name
+    END AS Case_Type
+         
+,CASE
+    WHEN wek.work_is_dollar IS NULL THEN 0
+    ELSE ABS (wek.work_is_dollar) 
+    END AS Refund_USD
+
+FROM mytable_alice_weekend wek
+LEFT JOIN mytable_alice_weeksunnydays wsd  ON  wek.case_id = wsd.CASE_KEY
+LEFT JOIN mytable_alice_weekraindays wrd ON  wek.cartao_transid = wrd.ospais_cartao_transid
+WHERE wek.client_number = TRIM( '123456789' )  /*you can insert any value here*/
+AND wek.open_date BETWEEN '2020-11-01' AND '2020-11-25'  /*refers to case open date range*/ 
+AND wek.workflow_name <> 'reclamacao'
+AND wek.workflow_name <> 'correcao'
+AND Case_Type IN 
+    (
+    'retorno'   --Can be removed if you don't want
+    , 'cartao return'  --Can be removed if you don't want
+    , 'claming'  --Can be removed if you don't want
+    )
+
+
+>>> MORE SYNTAX
+
+Select
+wek.first_name
+,wek.last_name
+,wek.first_name|| ' '|| wek.last_name AS Buyer_Full_Name -- /This will put first and second name together in one column with space between
+
+FROM mytable_alice_weekend wek
+LEFT JOIN mytable_alice_weeksunnydays wsd  ON  wek.case_id = wsd.CASE_KEY
+
+where wek.time_creation_date BETWEEN '2021-06-15' AND '2021-06-20'
+and wek.regra_id in ('1234','5678','91011','1314')
+
+
+
+
+
